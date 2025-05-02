@@ -13,7 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm install && npm run build
+      - run: npm install
+      - run: npm run build
+      - run: cp -r .next/static out/_next/ # Copiar archivos necesarios
+      - run: cp .next/BUILD_ID out/_next/BUILD_ID || true
+      - run: cp -r public/* out/ || true
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
