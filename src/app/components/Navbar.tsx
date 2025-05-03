@@ -1,16 +1,20 @@
-import React from 'react';
+// src/components/Navbar.tsx
 
-const Sidebar = () => {
+import { FaUserCircle } from "react-icons/fa";
+
+export default function Navbar() {
   return (
-    <aside className="w-64 h-screen bg-gray-800 text-white p-4">
-      <h2 className="text-xl font-bold mb-4">Menú</h2>
-      <ul className="space-y-2">
-        <li><a href="/dashboard" className="hover:underline">Dashboard</a></li>
-        <li><a href="/tickets" className="hover:underline">Tickets</a></li>
-        <li><a href="/login" className="hover:underline">Login</a></li>
-      </ul>
-    </aside>
+    <header className="bg-[#0f1f38] h-16 px-6 flex items-center justify-end text-white shadow-md">
+      <div className="flex items-center gap-4">
+        <span className="bg-green-500 w-4 h-4 rounded-full"></span>
+        <div className="text-right">
+          <p className="text-sm font-medium">Hilarys Camilo</p>
+          <p className="text-xs">Tecnología </p>
+        </div>
+        <div className="flex -space-x-2 overflow-hidden">
+          <FaUserCircle />
+        </div>
+      </div>
+    </header>
   );
-};
-
-export default Sidebar;
+}

@@ -3,22 +3,22 @@ import "@/./app/public/styles/globals.css";
 import Navbar from "@/app/components/Navbar";
 import Sidebar from "@/app/components/Sidebar";
 
-
-export default function RootLayout({
-  children,
-}: {
+interface LayoutProps {
   children: React.ReactNode;
-}) {
-  return (
-    <html lang="es">
-      <body>
-        {/* Puedes incluir el Navbar y/o Sidebar para las páginas autenticadas */}
-        <Navbar />
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 p-4">{children}</main>
-        </div>
-      </body>
-    </html>
-  );
 }
+
+const Layout = ({ children }: LayoutProps) => {
+  return (
+    <div className="flex h-screen">
+      <Sidebar />
+      <div className="flex flex-col flex-1">
+        <Navbar />
+        <main className="p-6 bg-gray-100 flex-1 overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default Layout;
