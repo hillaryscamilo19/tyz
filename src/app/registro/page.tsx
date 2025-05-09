@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Logo from "../public/img/tyz.png";
 import Ilustracion from "../public/img/logo2.png";
+import { useEffect } from "react";
 import {
   UserIcon,
   EnvelopeIcon,
@@ -22,9 +23,55 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleLogin = () => {
-    router.push("/login");
+  /**Services */
+
+  const handleRegister = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/users/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre_Usuario: username,
+          nombre: name,
+          email: email,
+          extensión: extensión,
+          departamento_id: departamentos, // Asegúrate de que sea el UUID del departamento
+          role: "usuario",
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        router.push("/login");
+      } else {
+        const error = await response.json();
+        console.error("Registro fallido:", error);
+      }
+    } catch (err) {
+      console.error("Error al registrarse:", err);
+    }
   };
+
+  // Estado para departamentos
+  const [departamentoList, setDepartamentoList] = useState([]);
+
+  useEffect(() => {
+    const fetchDepartamentos = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/departments/");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Datos recibidos:", data);
+        setDepartamentoList(data);
+      } catch (error) {
+        console.error("Error al cargar departamentos:", error);
+      }
+    };
+
+    fetchDepartamentos();
+  }, []);
 
   return (
     <div className="flex h-screen w-full">
@@ -85,11 +132,27 @@ export default function RegisterPage() {
             <span className="block mb-1 text-gray-600">Departamento</span>
             <div className="relative">
               <select
-                name="department"
+                name="departments"
                 className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={departamentos}
                 onChange={(e) => setDepartamentos(e.target.value)}
-              />
+              >
+                <option value="">Seleccione un departamento</option>
+                {departamentoList && departamentoList.length > 0 ? (
+                  departamentoList.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.nombre} 
+                    </option>
+
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    {departamentoList
+                      ? "No hay departamentos disponibles"
+                      : "Cargando departamentos..."}
+                  </option>
+                )}
+              </select>
               <BuildingOffice2Icon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
             </div>
 
@@ -98,7 +161,7 @@ export default function RegisterPage() {
             </span>
             <div className="relative">
               <input
-                type="password"
+                type="text"
                 placeholder="Escriba su Extension"
                 className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={extensión}
@@ -138,10 +201,10 @@ export default function RegisterPage() {
 
           {/* Botón Entrar */}
           <button
-            onClick={handleLogin}
+            onClick={handleRegister}
             className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-500 transition"
           >
-            Entrar
+            Registrarse
           </button>
 
           {/* Registro */}
