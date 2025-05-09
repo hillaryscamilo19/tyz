@@ -4,6 +4,7 @@ import Navbar from "@/app/components/Navbar";
 import Sidebar from "@/app/components/Sidebar";
 import TickedFormPage from "./components/TicketForm";
 import DashboardPage from "./components/TicketItem";
+import HomePage from "./home/page";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ const Layout = ({ children }: LayoutProps) => {
         <main className="p-6 bg-gray-100 flex-1 overflow-y-auto">
 
         <DashboardPage/>
+        <HomePage></HomePage>
           {children}
         </main>
       </div>

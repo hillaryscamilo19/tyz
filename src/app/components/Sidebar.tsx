@@ -22,7 +22,7 @@ const Sidebar = () => {
         <div>
           <h2 className="text-sm font-semibold text-gray-400 mb-2">INICIO</h2>
           <a
-            href="/"
+            href="/home"
             className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
           >
             <HomeIcon className="w-5 h-5 text-gray-300" />
@@ -32,7 +32,7 @@ const Sidebar = () => {
 
         {/* TICKETS */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-400 mb-2">TICKETS</h2>
+          <h2 className="text-sm font-semibold te.xt-gray-400 mb-2">TICKETS</h2>
           <a
             href="/crear-ticket"
             className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
