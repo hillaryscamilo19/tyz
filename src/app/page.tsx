@@ -1,30 +1,17 @@
-// src/app/layout.tsx
-import "@/./app/public/styles/globals.css";
-import Navbar from "@/app/components/Navbar";
-import Sidebar from "@/app/components/Sidebar";
-import TickedFormPage from "./components/TicketForm";
-import DashboardPage from "./components/TicketItem";
-import HomePage from "./home/page";
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout = ({ children }: LayoutProps) => {
+export default function Home() {
+  // Redirigir a la página de login
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Navbar />
-        <main className="p-6 bg-gray-100 flex-1 overflow-y-auto">
-
-        <DashboardPage/>
-        <HomePage></HomePage>
-          {children}
-        </main>
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">Sistema de Tickets TYZ</h1>
+      <p className="text-lg mb-8">Bienvenido al sistema de gestión de tickets</p>
+      <div className="flex gap-4">
+        <a href="/auth/login" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md transition">
+          Iniciar sesión
+        </a>
+        <a href="/registro" className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-md transition">
+          Registrarse
+        </a>
       </div>
     </div>
-  );
-};
-
-export default Layout;
+  )
+}
