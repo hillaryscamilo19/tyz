@@ -3,8 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
-import Logo from "../public/img/tyz.png";
-import Ilustracion from "../public/img/logo2.png";
 import { UserIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 
 export default function LoginPage() {
@@ -16,7 +14,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       setError(""); // Limpiar errores previos
-      
+
       // Crear un objeto URLSearchParams para enviar datos en formato form-urlencoded
       const formData = new URLSearchParams();
       formData.append("username", username);
@@ -24,10 +22,10 @@ export default function LoginPage() {
 
       const response = await fetch("http://localhost:8000/token", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/x-www-form-urlencoded" 
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: formData.toString()
+        body: formData.toString(),
       });
 
       if (response.ok) {
@@ -37,7 +35,10 @@ export default function LoginPage() {
       } else {
         const errorData = await response.json();
         console.error("Error de login:", errorData);
-        setError(errorData.detail || "Error al iniciar sesión. Verifica tus credenciales.");
+        setError(
+          errorData.detail ||
+            "Error al iniciar sesión. Verifica tus credenciales."
+        );
       }
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
@@ -49,15 +50,21 @@ export default function LoginPage() {
     <div className="flex h-screen w-full">
       {/* Columna Izquierda */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <Image src={Logo || "/placeholder.svg"} alt="Logo TYZ" className="mb-4" />
+        <Image
+          src="../public/img/tyz.png"
+          alt="Logo"
+          width={100}
+          height={100}
+        />
         <p className="text-center text-gray-600 mb-8 max-w-sm">
           Aplicación de tickets interna para las solicitudes realizadas entre
           departamentos.
         </p>
         <Image
-          src={Ilustracion || "/placeholder.svg"}
-          alt="Ilustración TYZ"
-          className="w-100 h-auto"
+          src="../public/img/logo2.png"
+          alt="Logo"
+          width={100}
+          height={100}
         />
       </div>
 
@@ -75,6 +82,7 @@ export default function LoginPage() {
               {error}
             </div>
           )}
+        
 
           {/* Input Usuario */}
           <div className="mb-4 relative">
@@ -102,7 +110,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleLogin();
+                  if (e.key === "Enter") handleLogin();
                 }}
               />
               <LockClosedIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
@@ -120,7 +128,7 @@ export default function LoginPage() {
           {/* Registro */}
           <p className="text-center text-sm text-gray-600 mt-4">
             ¿No tienes una cuenta?{" "}
-            <a href="/registro" className="text-green-600 hover:underline">
+            <a href="/auth/registro" className="text-green-600 hover:underline">
               Registrarse
             </a>
           </p>

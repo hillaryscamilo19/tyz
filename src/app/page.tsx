@@ -8,7 +8,7 @@ export default function Home() {
         <a href="/auth/login" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md transition">
           Iniciar sesión
         </a>
-        <a href="/registro" className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-md transition">
+        <a href="/auth/registro" className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-md transition">
           Registrarse
         </a>
       </div>

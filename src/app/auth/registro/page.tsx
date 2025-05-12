@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Logo from "../public/img/tyz.png";
-import Ilustracion from "../public/img/logo2.png";
+import tyz from "../public/img/tyz.png";
+import logo2 from "../public/img/logo2.png";
 import { useEffect } from "react";
+import Link from "next/link";
 import {
   UserIcon,
   EnvelopeIcon,
@@ -63,7 +64,6 @@ export default function RegisterPage() {
           throw new Error(`Error: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Datos recibidos:", data);
         setDepartamentoList(data);
       } catch (error) {
         console.error("Error al cargar departamentos:", error);
@@ -77,16 +77,12 @@ export default function RegisterPage() {
     <div className="flex h-screen w-full">
       {/* Columna Izquierda */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <Image src={Logo} alt="Logo TYZ" className="mb-4" />
+         <Image src="../public/img/tyz.png" alt="Logo" width={100} height={100} />
         <p className="text-center text-gray-600 mb-8 max-w-sm">
           Aplicación de tickets interna para las solicitudes realizadas entre
           departamentos.
         </p>
-        <Image
-          src={Ilustracion}
-          alt="Ilustración TYZ"
-          className="w-100 h-auto"
-        />
+         <Image src="../public/img/logo2.png" alt="Logo" width={100} height={100} />
       </div>
 
       {/* Columna Derecha */}
@@ -141,9 +137,8 @@ export default function RegisterPage() {
                 {departamentoList && departamentoList.length > 0 ? (
                   departamentoList.map((dept) => (
                     <option key={dept.id} value={dept.id}>
-                      {dept.nombre} 
+                      {dept.nombre}
                     </option>
-
                   ))
                 ) : (
                   <option value="" disabled>
@@ -209,10 +204,9 @@ export default function RegisterPage() {
 
           {/* Registro */}
           <p className="text-center text-sm text-gray-600 mt-4">
-            ¿Ya tienes una cuenta?{""}
-            <a href="/login" className="text-green-600 hover:underline">
+            <Link href="/login" className="text-green-600 hover:underline">
               Iniciar sesión
-            </a>
+            </Link>
           </p>
         </div>
       </div>

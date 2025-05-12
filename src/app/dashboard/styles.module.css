@@ -1,0 +1,36 @@
+.IconoList{
+    width: 50px;
+    color: rgba(23, 185, 36, 0.705);
+}
+
+.IconoWrench{
+     width: 50px;
+    color: rgb(209, 128, 22);
+}
+
+.IconoClock{
+     width: 50px;
+    color: rgb(112, 16, 141)
+}
+
+.IconoDocument{
+     width: 50px;
+    color: rgb(207, 194, 15)
+}
+
+.PanelTicked{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: stretch;
+    flex-direction: row;
+}
+
+.PanelNombre{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: stretch;
+    flex-direction: row;
+}
+
