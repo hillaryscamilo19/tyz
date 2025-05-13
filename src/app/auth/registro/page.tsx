@@ -136,7 +136,7 @@ export default function RegisterPage() {
                 <option value="">Seleccione un departamento</option>
                 {departamentoList && departamentoList.length > 0 ? (
                   departamentoList.map((dept) => (
-                    <option key={dept.id} value={dept.id}>
+                    <option key={dept.departamento_id} value={dept.departamento_id}>
                       {dept.nombre}
                     </option>
                   ))
@@ -204,7 +204,7 @@ export default function RegisterPage() {
 
           {/* Registro */}
           <p className="text-center text-sm text-gray-600 mt-4">
-            <Link href="/login" className="text-green-600 hover:underline">
+            <Link href="/auth/login" className="text-green-600 hover:underline">
               Iniciar sesión
             </Link>
           </p>

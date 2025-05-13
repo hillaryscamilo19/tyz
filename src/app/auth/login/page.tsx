@@ -5,6 +5,17 @@ import { useState } from "react";
 import Image from "next/image";
 import { UserIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 
+interface User {
+  _id: string;
+  fullname: string;
+  email: string;
+  phone_ext: number;
+  username: string;
+  department: string;
+  role: number;
+  status: boolean;
+}
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,12 +31,12 @@ export default function LoginPage() {
       formData.append("username", username);
       formData.append("password", password);
 
-      const response = await fetch("http://localhost:8000/token", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
         },
-        body: formData.toString(),
+        body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
@@ -82,7 +93,6 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-        
 
           {/* Input Usuario */}
           <div className="mb-4 relative">
