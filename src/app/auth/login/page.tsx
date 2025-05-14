@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      setError(""); // Limpiar errores previos
+      setError("");
 
       // Crear un objeto URLSearchParams para enviar datos en formato form-urlencoded
       const formData = new URLSearchParams();
@@ -77,13 +77,14 @@ export default function LoginPage() {
           width={100}
           height={100}
         />
+        <label className="text-2xl fs-6 text  text-dark-emphasis mb-1">Hecho con Amor By: Hillarys💕</label>
       </div>
 
       {/* Columna Derecha */}
       <div className="w-1/2 bg-gray-50 flex items-center justify-center">
-        <div className="w-full max-w-md bg-white p-8 rounded shadow">
-          <h2 className="text-sm text-gray-500">Inicio de sesión</h2>
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">
+        <div className="w-full max-w-md bg-stone p-8 rounded shadow">
+          <h2 className="text-dark-emphasis fs-6 text">Inicio de sesión</h2>
+          <h1 className="text-2xl fs-2 text font-bold text-dark-emphasis mb-6">
             Iniciar sesión en TYZ
           </h1>
 
@@ -101,7 +102,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Escriba su nombre de usuario o email"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600 text-dark-emphasis "
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -116,14 +117,14 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Escriba su contraseña"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="w-full border text-dark-emphasis  border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleLogin();
                 }}
               />
-              <LockClosedIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
+              <LockClosedIcon className="w-5 h-5 absolute left-3 top-2.5 text-dark-emphasis " />
             </div>
           </div>
 

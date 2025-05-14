@@ -15,6 +15,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+interface User {
+  _id: string;
+  name: string;
+}
+
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,13 +27,24 @@ export default function RegisterPage() {
   const [extensión, setExtensión] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   /**Services */
 
   const handleRegister = async () => {
     try {
-      const response = await fetch("http://localhost:8000/users/", {
+      setError("");
+
+      const formData = new URLSearchParams();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("departamentos", departamentos);
+      formData.append("extensión", extensión);
+      formData.append("username", username);
+      formData.append("password", password);
+
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -36,14 +52,14 @@ export default function RegisterPage() {
           nombre: name,
           email: email,
           extensión: extensión,
-          departamento_id: departamentos, // Asegúrate de que sea el UUID del departamento
+          departamento_id: departamentos,
           role: "usuario",
           password: password,
         }),
       });
 
       if (response.ok) {
-        router.push("/login");
+        router.push("/auth/login");
       } else {
         const error = await response.json();
         console.error("Registro fallido:", error);
@@ -59,7 +75,8 @@ export default function RegisterPage() {
   useEffect(() => {
     const fetchDepartamentos = async () => {
       try {
-        const response = await fetch("http://localhost:8000/departments/");
+      const response = await fetch('http://localhost:8000/api/departments');
+
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
@@ -88,8 +105,8 @@ export default function RegisterPage() {
       {/* Columna Derecha */}
       <div className="w-1/2 bg-gray-50 flex items-center justify-center">
         <div className="w-full max-w-md bg-white p-8 rounded shadow">
-          <h2 className="text-sm text-gray-500">Crear cuenta</h2>
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          <h2 className="fs-6 text text-body-emphasis">Crear cuenta</h2>
+          <h1 className="fs-3 text font-bold text-body-emphasis mb-6">
             Registrarse en TYZ
           </h1>
 
@@ -100,7 +117,7 @@ export default function RegisterPage() {
               <input
                 type="text"
                 placeholder="Escriba su nombre de usuario"
-                className="w-full rounded-lg border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full rounded-lg border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -115,7 +132,7 @@ export default function RegisterPage() {
               <input
                 type="text"
                 placeholder="Escriba su nombre de usuario"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -129,16 +146,17 @@ export default function RegisterPage() {
             <div className="relative">
               <select
                 name="departments"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={departamentos}
                 onChange={(e) => setDepartamentos(e.target.value)}
               >
                 <option value="">Seleccione un departamento</option>
                 {departamentoList && departamentoList.length > 0 ? (
                   departamentoList.map((dept) => (
-                    <option key={dept.departamento_id} value={dept.departamento_id}>
-                      {dept.nombre}
+                   <option key={dept._id} value={dept._id}>
+                    {dept.name}
                     </option>
+
                   ))
                 ) : (
                   <option value="" disabled>
@@ -158,7 +176,7 @@ export default function RegisterPage() {
               <input
                 type="text"
                 placeholder="Escriba su Extension"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={extensión}
                 onChange={(e) => setExtensión(e.target.value)}
               />
@@ -172,7 +190,7 @@ export default function RegisterPage() {
               <input
                 type="text"
                 placeholder="Escriba su nombre de usuario"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -184,9 +202,9 @@ export default function RegisterPage() {
             <span className="block mb-1 text-gray-600">Contraseña</span>
             <div className="relative">
               <input
-                type="text"
+                type="password"
                 placeholder="Escriba su Contraseña"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

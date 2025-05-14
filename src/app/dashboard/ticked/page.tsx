@@ -27,8 +27,7 @@ export default function MisTickets() {
           </div>
 
           {/* Lista de tickets */}
-          <div className="bg-slate-700 rounded-lg p-8 flex flex-col items-center justify-center">
-            <TicketIcon className="h-16 w-16 text-slate-500 mb-4" />
+          <div className="bton bg-slate-700 rounded-lg p-8 flex flex-col items-center justify-center">
             <p className="text-gray-400 text-center">No tienes tickets asignados actualmente.</p>
             <p className="text-gray-500 text-sm text-center mt-2">Los tickets que te sean asignados aparecerán aquí.</p>
           </div>

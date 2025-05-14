@@ -1,0 +1,25 @@
+.main{
+    background-color: #f0f8ff;
+}
+
+.Container {
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.continerInput {
+
+  justify-content: space-between;
+  display: flex;
+}
+
+.containerMesange {
+    background-color: aqua;
+    display: flex;
+  flex-direction: column;
+}
+.p-6{
+
+}

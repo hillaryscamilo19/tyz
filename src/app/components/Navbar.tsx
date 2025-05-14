@@ -19,7 +19,7 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setDropdownOpen(false);
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   // Obtener información del usuario

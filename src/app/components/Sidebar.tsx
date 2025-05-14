@@ -55,7 +55,7 @@ const Sidebar = () => {
             <span>Mis tickets asignados</span>
           </a>
           <a
-            href="/departamento"
+            href="/dashboard/ticked"
             className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
           >
             <BuildingOffice2Icon className="w-5 h-5 text-gray-300" />
