@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import tyz from "../public/img/tyz.png";
-import logo2 from "../public/img/logo2.png";
+
 import { useEffect } from "react";
 import Link from "next/link";
 import {
@@ -15,10 +14,14 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-interface User {
+
+type Usuario = {
   _id: string;
-  name: string;
-}
+  fullname?: string;
+  role?: string;
+  departamento_id?: string;
+};
+
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -93,13 +96,14 @@ export default function RegisterPage() {
   return (
     <div className="flex h-screen w-full">
       {/* Columna Izquierda */}
-      <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-         <Image src="../public/img/tyz.png" alt="Logo" width={100} height={100} />
-        <p className="text-center text-gray-600 mb-8 max-w-sm">
+      <div className="w-1/2 bg-white flex flex-col justify-center mb-6 py-2 items-center p-10">
+    
+        <p className="text-center text-gray-600 mb-6 max-w-sm">
           Aplicación de tickets interna para las solicitudes realizadas entre
           departamentos.
         </p>
-         <Image src="../public/img/logo2.png" alt="Logo" width={100} height={100} />
+ 
+ 
       </div>
 
       {/* Columna Derecha */}

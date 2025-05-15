@@ -7,21 +7,27 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [usuario, setUsuario] = useState(null);
   const [departamento, setDepartamento] = useState("");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-
   const toggleTheme = () => {
     setDarkMode(!darkMode);
   };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     setDropdownOpen(false);
     router.push("/auth/login");
   };
 
+  type Usuario = {
+  _id: string;
+  fullname?: string;
+  role?: string;
+  departamento_id?: string;
+};
+
+
+const [usuario, setUsuario] = useState<Usuario | null>(null);
   // Obtener información del usuario
   useEffect(() => {
     const fetchUsuario = async () => {
@@ -36,7 +42,7 @@ export default function Navbar() {
         }
         
         // Hacer la solicitud con el token en el encabezado
-        const response = await fetch("http://localhost:8000/users/me", {
+        const response = await fetch("http://localhost:8000/api/profile", {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -58,7 +64,7 @@ export default function Navbar() {
         
         // Si tenemos el ID del departamento, obtener su información
         if (data.departamento_id) {
-          fetchDepartamento(data.departamento_id);
+          useEffect(data.departamento_id);
         }
       } catch (error) {
         console.error("Error al cargar datos del usuario:", error);
@@ -71,40 +77,26 @@ export default function Navbar() {
   }, [router]);
 
   // Función para obtener el nombre del departamento por su ID
-  const fetchDepartamento = async (departamentoId) => {
-    try {
-      const token = localStorage.getItem("token");
-      
-      // Obtener todos los departamentos
-      const response = await fetch("http://localhost:8000/departments/", {
-        headers: {
-          "Authorization": `Bearer ${token}`
+    const [departamentoList, setDepartamentoList] = useState([]);
+
+  useEffect(() => {
+    const fetchDepartamentos = async () => {
+      try {
+      const response = await fetch('http://localhost:8000/api/departments');
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
         }
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const data = await response.json();
+        setDepartamentoList(data);
+      } catch (error) {
+        console.error("Error al cargar departamentos:", error);
       }
-      
-      const departamentos = await response.json();
-      
-      // Buscar el departamento por ID
-      const departamentoEncontrado = departamentos.find(
-        (dept) => dept.id === departamentoId
-      );
-      
-      if (departamentoEncontrado) {
-        // Usar el campo 'nombre' del departamento
-        setDepartamento(departamentoEncontrado.nombre);
-      } else {
-        console.error("Departamento no encontrado:", departamentoId);
-        setDepartamento("Departamento no encontrado");
-      }
-    } catch (error) {
-      console.error("Error al cargar el departamento:", error);
-      setDepartamento("Error al cargar departamento");
-    }
-  };
+    };
+
+    fetchDepartamentos();
+  }, []);
+
 
   return (
     <nav className="w-full bg-slate-800 text-white p-4 flex items-center justify-end relative shadow-md">
@@ -133,7 +125,7 @@ export default function Navbar() {
           >
             <div className="flex flex-col items-end mr-2">
               <span className="font-medium">
-                {loading ? "Cargando..." : usuario?.nombre || "Usuario"}
+                {loading ? "Cargando..." : usuario?._id || "Usuario"}
               </span>
               <span className="text-xs text-gray-300">
                 {loading ? "" : departamento || "Cargando departamento..."}
@@ -146,7 +138,7 @@ export default function Navbar() {
           {/* Dropdown */}
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-slate-700 rounded-md shadow-md z-10">
-              {usuario?.role === "usuario" && (
+              {usuario?.role === "Administrador" && (
                 <button
                   className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-600"
                 >

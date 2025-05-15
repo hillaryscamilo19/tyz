@@ -41,7 +41,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.access_token); // Guardar el token
+        localStorage.setItem("token", data.access_token); 
         router.push("/dashboard");
       } else {
         const errorData = await response.json();
@@ -61,22 +61,12 @@ export default function LoginPage() {
     <div className="flex h-screen w-full">
       {/* Columna Izquierda */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-10">
-        <Image
-          src="../public/img/tyz.png"
-          alt="Logo"
-          width={100}
-          height={100}
-        />
+     
         <p className="text-center text-gray-600 mb-8 max-w-sm">
           Aplicación de tickets interna para las solicitudes realizadas entre
           departamentos.
         </p>
-        <Image
-          src="../public/img/logo2.png"
-          alt="Logo"
-          width={100}
-          height={100}
-        />
+         
         <label className="text-2xl fs-6 text  text-dark-emphasis mb-1">Hecho con Amor By: Hillarys💕</label>
       </div>
 
@@ -102,11 +92,11 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Escriba su nombre de usuario o email"
-                className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600 text-dark-emphasis "
+                className="w-full border text-dark-emphasis border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600 text-dark-emphasis "
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <UserIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
+              <UserIcon className="w-5 h-5 text-dark-emphasis absolute left-3 top-2.5 text-gray-400" />
             </div>
           </div>
 

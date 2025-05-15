@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Logo from "../public/img/LogTYZ.png";
+import Logo from "../../../public/img/LogTYZ.png";
 import {
   HomeIcon,
   PlusIcon,

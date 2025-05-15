@@ -2,8 +2,8 @@
     background-color: #f0f8ff;
 }
 
-.Container {
-
+.Container {  
+  background-color: #f0f8ff;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -19,7 +19,4 @@
     background-color: aqua;
     display: flex;
   flex-direction: column;
-}
-.p-6{
-
 }
