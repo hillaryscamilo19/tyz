@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "tyz-ticket"
-  }
+    "default": "tyz-ticket",
+    "no": "estudiante-f8a31"
+  },
+  "targets": {},
+  "etags": {}
 }
