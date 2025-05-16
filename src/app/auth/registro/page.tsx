@@ -21,7 +21,11 @@ export default function RegisterPage() {
   const [, setError] = useState("");
   const router = useRouter();
 
-  /**Services */
+type Departamento = {
+  _id: string;
+  name: string;
+};
+
 
   const handleRegister = async () => {
     try {
@@ -61,7 +65,7 @@ export default function RegisterPage() {
   };
 
   // Estado para departamentos
-  const [departamentoList, setDepartamentoList] = useState([]);
+ const [departamentoList, setDepartamentoList] = useState<Departamento[]>([]);
 
   useEffect(() => {
     const fetchDepartamentos = async () => {
