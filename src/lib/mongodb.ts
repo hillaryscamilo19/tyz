@@ -1,36 +1,42 @@
-// lib/mongodb.ts
-import mongoose from 'mongoose';
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
-console.log("Mongo URI en uso:", MONGODB_URI);
-
-
-if (!MONGODB_URI) {
-  throw new Error('Por favor define la variable MONGODB_URI en .env.local');
+if (!process.env.MONGODB_URI) {
+  throw new Error("Por favor, define la variable de entorno MONGODB_URI");
 }
 
-interface MongooseConnection {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
-  
-}
+const uri = process.env.MONGODB_URI;
+const options = {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+};
 
-let cached: MongooseConnection = (global as any).mongoose;
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
 
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
-  console.log("Mongo URI en uso:", MONGODB_URI);
-}
+if (process.env.NODE_ENV === "development") {
+  const globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>;
+  };
 
-export async function dbConnect(): Promise<typeof mongoose> {
-  if (cached.conn) return cached.conn;
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
-    });
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    globalWithMongo._mongoClientPromise = client.connect();
   }
-
-  cached.conn = await cached.promise;
-  return cached.conn;
+  clientPromise = globalWithMongo._mongoClientPromise;
+} else {
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
 }
+
+// Función nombrada para conectarse a la base de datos
+export const connectToDatabase = async () => {
+  const client = await clientPromise;
+  const db = client.db(); // Puedes pasar el nombre si necesitas uno específico
+  return { client, db };
+};
+
+// Exportación por defecto por compatibilidad
+export default clientPromise;

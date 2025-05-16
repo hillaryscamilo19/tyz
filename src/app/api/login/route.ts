@@ -1,16 +1,78 @@
-import { dbConnect } from "@/lib/mongodb";
-import Attachment from "@/app/pages/models/Attachment";
-import { NextResponse } from "next/server";
+import { authenticateUser } from "@/lib/api/users"
+import NextAuth from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 
-export async function GET() {
-  await dbConnect();
-  const attachments = await Attachment.find();
-  return NextResponse.json(attachments);
+
+export const authOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Usuario", type: "text" },
+        password: { label: "Contraseña", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.username || !credentials?.password) {
+          return null
+        }
+
+        try {
+          const user = await authenticateUser(credentials.username, credentials.password)
+
+          if (!user) {
+            return null
+          }
+
+          if (!user.status) {
+            throw new Error("Usuario inactivo. Contacte al administrador.")
+          }
+
+          return {
+            id: user._id.toString(),
+            name: user.fullname,
+            email: user.email,
+            role: user.role,
+            department: user.department.toString(),
+            username: user.username,
+          }
+        } catch (error) {
+          console.error("Error de autenticación:", error)
+          return null
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.role = user.role
+        token.department = user.department
+        token.username = user.username
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id
+        session.user.role = token.role
+        session.user.department = token.department
+        session.user.username = token.username
+      }
+      return session
+    },
+  },
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 24 horas
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 }
 
-export async function POST(req: Request) {
-  await dbConnect();
-  const data = await req.json();
-  const newAttachment = await Attachment.create(data);
-  return NextResponse.json(newAttachment);
-}
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST }

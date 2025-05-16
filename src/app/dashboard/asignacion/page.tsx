@@ -5,13 +5,18 @@ import { TicketIcon } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function CrearNuevoTicket() {
+  type Departamento = {
+  _id: string;
+  name: string;
+};
+
+const [departamentoList, setDepartamentoList] = useState<Departamento[]>([]);
   const [asunto, setAsunto] = useState("");
   const [categoria, setCategoria] = useState("");
   const [departamentos, setDepartamentos] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [archivo, setArchivo] = useState<File | null>(null);
 
-  const [departamentoList, setDepartamentoList] = useState([]);
 
   useEffect(() => {
     const fetchDepartamentos = async () => {
