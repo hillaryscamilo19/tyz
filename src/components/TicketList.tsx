@@ -1,4 +1,4 @@
-import TicketList from "@/app/components/TicketList";
+import TicketList from "@/components/TicketList";
 
 export default function DashboardPage() {
   return (

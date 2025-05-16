@@ -1,4 +1,3 @@
-import TicketList from "@/app/components/TicketList";
 import TickedFormPage from "./TicketForm";
 
 export default function DashboardPage() {
