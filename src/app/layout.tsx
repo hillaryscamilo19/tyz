@@ -2,7 +2,7 @@ import type React from "react"
 import { Inter } from "next/font/google"
 import "./globals.css"
 
-import { Toaster } from "@/app/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 

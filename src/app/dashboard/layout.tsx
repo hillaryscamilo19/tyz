@@ -2,10 +2,11 @@
 
 import type React from "react"
 
-import Navbar from "@/app/components/Navbar"
-import Sidebar from "@/app/components/Sidebar"
+
+import Sidebar from "@/components/Sidebar"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import Navbar from "@/components/Navbar"
 
 export default function DashboardLayout({
   children,
