@@ -4,17 +4,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UserIcon, LockClosedIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
-interface User {
-  _id: string;
-  fullname: string;
-  email: string;
-  phone_ext: number;
-  username: string;
-  department: string;
-  role: number;
-  status: boolean;
-}
-
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
