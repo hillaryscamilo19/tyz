@@ -1,9 +1,5 @@
 "use client";
-
-import Image from "next/image";
-
 import { useEffect } from "react";
-import Link from "next/link";
 import {
   UserIcon,
   EnvelopeIcon,
@@ -13,7 +9,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
 
 type Usuario = {
   _id: string;
@@ -108,9 +103,9 @@ export default function RegisterPage() {
 
       {/* Columna Derecha */}
       <div className="w-1/2 bg-gray-50 flex items-center justify-center">
-        <div className="w-full max-w-md bg-white p-8 rounded shadow">
-          <h2 className="fs-6 text text-body-emphasis">Crear cuenta</h2>
-          <h1 className="fs-3 text font-bold text-body-emphasis mb-6">
+        <div className="w-full border-stroke dark:border-strokedark xl:w-1/2">
+          <h2 className="mb-1.5 block font-medium">Crear cuenta</h2>
+          <h1 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
             Registrarse en TYZ
           </h1>
 
@@ -145,12 +140,13 @@ export default function RegisterPage() {
           </div>
 
           {/* Input Contraseña */}
-          <div className="mb-6 relative">
-            <span className="block mb-1 text-gray-600">Departamento</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+            <span className="block mb-1 font-medium text-gray-600">Departamento</span>
             <div className="relative">
               <select
                 name="departments"
-                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-50"
                 value={departamentos}
                 onChange={(e) => setDepartamentos(e.target.value)}
               >
@@ -172,20 +168,22 @@ export default function RegisterPage() {
               </select>
               <BuildingOffice2Icon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
             </div>
-
-            <span className="block mb-1 text-gray-600">
+            </div>
+            <div>
+            <span className="block mb-1 font-medium text-gray-600">
               Número de extensión
             </span>
             <div className="relative">
               <input
                 type="text"
                 placeholder="Escriba su Extension"
-                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-50"
                 value={extensión}
                 onChange={(e) => setExtensión(e.target.value)}
               />
               <PhoneIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
             </div>
+          </div>
           </div>
 
           <div className="mb-4 relative">
@@ -224,11 +222,12 @@ export default function RegisterPage() {
             Registrarse
           </button>
 
-          {/* Registro */}
-          <p className="text-center text-sm text-gray-600 mt-4">
-            <Link href="/auth/login" className="text-green-600 hover:underline">
+          {/*Registro */}
+             <p className="text-center text-sm text-gray-600 mt-4">
+             ¿Ya tienes una cuenta?{" "}
+            <a href="/auth/login" className="text-green-600 hover:underline">
               Iniciar sesión
-            </Link>
+            </a>
           </p>
         </div>
       </div>

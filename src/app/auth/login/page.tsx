@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Image from "next/image";
-import { UserIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { UserIcon, LockClosedIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
 interface User {
   _id: string;
@@ -121,8 +120,9 @@ export default function LoginPage() {
           {/* Botón Entrar */}
           <button
             onClick={handleLogin}
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-500 transition"
+            className="backgraou w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-500 transition"
           >
+            <ArrowRightStartOnRectangleIcon className="w-5 h-5 absolute left-316 text-white text-dark-emphasis "/>
             Entrar
           </button>
 
