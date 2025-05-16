@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Logo from "../../../public/img/LogTYZ.png";
 import {
   HomeIcon,
   PlusIcon,
@@ -8,13 +7,12 @@ import {
   DocumentDuplicateIcon,
   TicketIcon
 } from "@heroicons/react/24/outline";
-import TickedFormPage from "./TicketForm";
 
 const Sidebar = () => {
   return (
     <aside className="w-64 h-screen bg-slate-800 text-white flex flex-col p-6">
       <div className="mb-8">
-        <Image src={Logo} alt="TYZ Logo" width={150} />
+        <Image src="/img/LogTYZ.png" alt="TYZ Logo" width={150} height={50} />
       </div>
 
       <div className="space-y-6">
