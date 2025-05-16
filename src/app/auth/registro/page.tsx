@@ -18,7 +18,7 @@ export default function RegisterPage() {
   const [extensión, setExtensión] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
   const router = useRouter();
 
   /**Services */
