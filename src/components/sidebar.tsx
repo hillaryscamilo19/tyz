@@ -1,153 +1,81 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React from "react";
+import Image from "next/image";
 import {
-  Home,
-  Plus,
-  Inbox,
-  Building2,
-  FileText,
-  BarChart3,
-  Settings,
-  Users,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
-import { UserRoles } from "@/lib/models/types";
+  HomeIcon,
+  PlusIcon,
+  BuildingOffice2Icon,
+  DocumentDuplicateIcon,
+  TicketIcon
+} from "@heroicons/react/24/outline";
+import TickedFormPage from "./TicketForm";
 
-export default function Sidebar() {
-  const pathname = usePathname();
-  const { data: session } = useSession();
-
-  const isActive = (path: string) => {
-    return pathname === path || pathname.startsWith(`${path}/`);
-  };
-
-  const isAdmin = session?.user?.role === UserRoles.ADMIN;
-
+const Sidebar = () => {
   return (
-    <div className="w-[150px] bg-[#333] text-white flex flex-col h-full">
-      <div className="p-4 bg-[#4CAF50] flex items-center justify-center">
-        <Link href="/" className="flex items-center">
-          <h1 className="text-2xl font-bold text-white">TY2</h1>
-        </Link>
+    <aside className="w-64 h-screen bg-slate-800 text-white flex flex-col p-6">
+      <div className="mb-8">
+        <Image src='public/img/LogTYZ.png' alt="TYZ Logo" width={150} />
       </div>
-      <div className="p-4 text-xs uppercase text-gray-400">Ticket</div>
-      <nav className="flex-1">
-        <ul className="space-y-1 px-2">
-          <li>
-            <Link
-              href="/dashboard"
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                isActive("/dashboard") && !isActive("/dashboard/crear-ticket")
-                  ? "bg-[#444]"
-                  : ""
-              }`}
-            >
-              <Home className="h-4 w-4" />
-              <span>Inicio</span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/crear-ticket"
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                isActive("/dashboard/crear-ticket") ? "bg-[#444]" : ""
-              }`}
-            >
-              <Plus className="h-4 w-4" />
-              <span>Crear nuevo ticket</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <div className="p-4 text-xs uppercase text-gray-400">Asignados</div>
-      <nav className="flex-1">
-        <ul className="space-y-1 px-2">
-          <li>
-            <Link
-              href="/dashboard/ticked"
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                isActive("/dashboard/ticked") ? "bg-[#444]" : ""
-              }`}
-            >
-              <Inbox className="h-4 w-4" />
-              <span>Mis tickets asignados</span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/departamento"
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                isActive("/dashboard/departamento") ? "bg-[#444]" : ""
-              }`}
-            >
-              <Building2 className="h-4 w-4" />
-              <span>Asignados al departamento</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <div className="p-4 text-xs uppercase text-gray-400">Creados</div>
-      <nav className="flex-1">
-        <ul className="space-y-1 px-2">
-          <li>
-            <Link
-              href="/dashboard/nuestros-creados"
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                isActive("/dashboard/nuestros-creados") ? "bg-[#444]" : ""
-              }`}
-            >
-              <FileText className="h-4 w-4" />
-              <span>Nuestros creados</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      {isAdmin && (
-        <>
-          <div className="p-4 text-xs uppercase text-gray-400">
-            Administración
-          </div>
-          <nav className="flex-1">
-            <ul className="space-y-1 px-2">
-              <li>
-                <Link
-                  href="/dashboard/estadisticas"
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                    isActive("/dashboard/estadisticas") ? "bg-[#444]" : ""
-                  }`}
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  <span>Estadísticas</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/usuarios"
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                    isActive("/dashboard/usuarios") ? "bg-[#444]" : ""
-                  }`}
-                >
-                  <Users className="h-4 w-4" />
-                  <span>Usuarios</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/configuracion"
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm text-white hover:bg-[#444] ${
-                    isActive("/dashboard/configuracion") ? "bg-[#444]" : ""
-                  }`}
-                >
-                  <Settings className="h-4 w-4" />
-                  <span>Configuración</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </>
-      )}
-    </div>
+
+      <div className="space-y-6">
+        {/* INICIO */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-400 mb-2">INICIO</h2>
+          <a
+            href="/home"
+            className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
+          >
+            <HomeIcon className="w-5 h-5 text-gray-300" />
+            <span>Inicio</span>
+          </a>
+        </div>
+
+        {/* TICKETS */}
+        <div>
+          <h2 className="text-sm font-semibold te.xt-gray-400 mb-2">TICKETS</h2>
+          <a
+            href="/crear-ticket"
+            className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
+          >
+            <PlusIcon className="w-5 h-5 text-gray-300" />
+            <span>Crear nuevo ticket</span>
+          </a>
+        </div>
+
+        {/* ASIGNADOS */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-400 mb-2">
+            ASIGNADOS
+          </h2>
+          <a
+            href="/mis-tickets"
+            className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
+          >
+            <TicketIcon className="w-5 h-5 text-gray-300" />
+            <span>Mis tickets asignados</span>
+          </a>
+          <a
+            href="/departamento"
+            className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
+          >
+            <BuildingOffice2Icon className="w-5 h-5 text-gray-300" />
+            <span>Asignados al departamento</span>
+          </a>
+        </div>
+
+        {/* CREADOS */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-400 mb-2">CREADOS</h2>
+          <a
+            href="/nuestros-creados"
+            className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
+          >
+            <DocumentDuplicateIcon className="w-5 h-5 text-gray-300" />
+            <span>Nuestros creados</span>
+          </a>
+        </div>
+      </div>
+    </aside>
   );
-}
+};
+
+export default Sidebar;

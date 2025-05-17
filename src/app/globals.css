@@ -254,6 +254,7 @@
   --color-stone-950: oklch(0.147 0.004 49.25);
   --color-black: #000;
   --color-white: #fff;
+  --color-tyz: #65A206;
 }
 
 @media (prefers-color-scheme: dark) {

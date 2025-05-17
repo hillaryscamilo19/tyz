@@ -1,7 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 import bcrypt from "bcryptjs"
-import type { User } from "@/types"
+import { User } from "../models/types"
 
 export async function authenticateUser(username: string, password: string): Promise<User | null> {
   try {

@@ -7,17 +7,22 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [usuario, setUsuario] = useState(null);
   const [departamento, setDepartamento] = useState("");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+
   const toggleTheme = () => {
     setDarkMode(!darkMode);
   };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setDropdownOpen(false);
-    router.push("/auth/login");
+    router.push("/login");
   };
+
 
   type Usuario = {
   _id: string;
@@ -27,7 +32,6 @@ export default function Navbar() {
 };
 
 
-const [usuario, setUsuario] = useState<Usuario | null>(null);
   // Obtener información del usuario
   useEffect(() => {
     const fetchUsuario = async () => {
@@ -42,7 +46,7 @@ const [usuario, setUsuario] = useState<Usuario | null>(null);
         }
         
         // Hacer la solicitud con el token en el encabezado
-        const response = await fetch("http://localhost:8000/api/profile", {
+        const response = await fetch("http://localhost:8000/users/me", {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -64,7 +68,7 @@ const [usuario, setUsuario] = useState<Usuario | null>(null);
         
         // Si tenemos el ID del departamento, obtener su información
         if (data.departamento_id) {
-          useEffect(data.departamento_id);
+          fetchDepartamento(data.departamento_id);
         }
       } catch (error) {
         console.error("Error al cargar datos del usuario:", error);
@@ -76,25 +80,77 @@ const [usuario, setUsuario] = useState<Usuario | null>(null);
     fetchUsuario();
   }, [router]);
 
-  // Función para obtener el nombre del departamento por su ID
-    const [departamentoList, setDepartamentoList] = useState([]);
+ // Función para obtener el nombre del departamento por su ID
+  const fetchDepartamento = async (departamentoId) => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Obtener todos los departamentos
+      const response = await fetch("http://localhost:8000/departments/", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      
+      const departamentos = await response.json();
+      
+      // Buscar el departamento por ID
+      const departamentoEncontrado = departamentos.find(
+        (dept) => dept.id === departamentoId
+      );
+      
+      if (departamentoEncontrado) {
+        // Usar el campo 'nombre' del departamento
+        setDepartamento(departamentoEncontrado.nombre);
+      } else {
+        console.error("Departamento no encontrado:", departamentoId);
+        setDepartamento("Departamento no encontrado");
+      }
+    } catch (error) {
+      console.error("Error al cargar el departamento:", error);
+      setDepartamento("Error al cargar departamento");
+    }
+  };
 
   useEffect(() => {
-    const fetchDepartamentos = async () => {
-      try {
-      const response = await fetch('http://localhost:8000/api/departments');
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+const fetchDepartamento = async (departamentoId) => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Obtener todos los departamentos
+      const response = await fetch("http://localhost:8000/departments/", {
+        headers: {
+          "Authorization": `Bearer ${token}`
         }
-        const data = await response.json();
-        setDepartamentoList(data);
-      } catch (error) {
-        console.error("Error al cargar departamentos:", error);
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
       }
-    };
-
-    fetchDepartamentos();
+      
+      const departamentos = await response.json();
+      
+      // Buscar el departamento por ID
+      const departamentoEncontrado = departamentos.find(
+        (dept) => dept.id === departamentoId
+      );
+      
+      if (departamentoEncontrado) {
+        // Usar el campo 'nombre' del departamento
+        setDepartamento(departamentoEncontrado.nombre);
+      } else {
+        console.error("Departamento no encontrado:", departamentoId);
+        setDepartamento("Departamento no encontrado");
+      }
+    } catch (error) {
+      console.error("Error al cargar el departamento:", error);
+      setDepartamento("Error al cargar departamento");
+    }
+  };
   }, []);
 
 
@@ -131,7 +187,7 @@ const [usuario, setUsuario] = useState<Usuario | null>(null);
                 {loading ? "" : departamento || "Cargando departamento..."}
               </span>
             </div>
-            <CircleUserRoundIcon size={40} />
+            <CircleUserRoundIcon size={60} />
             <span className="text-sm">▼</span>
           </button>
 

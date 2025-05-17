@@ -1,16 +1,19 @@
-export default function Home() {
-  // Redirigir a la página de login
+
+import { LoginForm } from "@/components/login-form"
+import { getServerSession } from "next-auth/next"
+import { redirect } from "next/navigation"
+import { authOptions } from "@/lib/api/authOptions" 
+export default async function LoginPage() {
+  const session = await getServerSession(authOptions)
+
+  if (session) {
+    redirect("/dashboard")
+  }
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-4">Sistema de Tickets TYZ</h1>
-      <p className="text-lg mb-8">Bienvenido al sistema de gestión de tickets</p>
-      <div className="flex gap-4">
-        <a href="/login" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md transition">
-          Iniciar sesión
-        </a>
-        <a href="/registro" className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-md transition">
-          Registrarse
-        </a>
+    <div className="dark:bg-boxdark-2 dark:text-bodydark w-full h-full flex">
+      <div className="alia-center h-auto m-auto rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <LoginForm />
       </div>
     </div>
   )
