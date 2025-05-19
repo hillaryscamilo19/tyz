@@ -22,9 +22,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={inter.className}>
         <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
             {children}
-          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>

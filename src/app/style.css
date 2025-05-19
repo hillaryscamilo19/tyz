@@ -1,0 +1,79 @@
+/* Contenedor principal */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 20px;
+}
+
+/* Card principal */
+.login-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1250px;
+  min-height: 700px;
+  background-color: #fff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Lado izquierdo */
+.login-left {
+  width: 50%;
+  background-color: #ffffff;
+  padding: 60px 40px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Lado derecho */
+.login-right {
+  width: 50%;
+  background-color: #ffffff;
+  padding: 60px 50px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.img {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 28px;
+  flex-direction: column;
+}
+
+.Boton {
+  background-color: rgba(101, 162, 6, 1);
+}
+
+.title {
+  color: rgba(101, 162, 6, 1);
+}
+
+.error {
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.titleError {
+  place-content: center flex-start;
+  align-items: center;
+  gap: 2%;
+  display: flex;
+}

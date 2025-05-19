@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getUsers, createUser } from "@/lib/api/users"
+import { getAllUsers, createUser } from "@/lib/api/users"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { UserRoles } from "@/lib/models/types"
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Acceso denegado" }, { status: 403 })
     }
 
-    const users = await getUsers()
+    const users = await getAllUsers()
 
     return NextResponse.json(users)
   } catch (error) {

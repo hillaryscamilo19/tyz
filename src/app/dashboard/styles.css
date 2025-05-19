@@ -37,3 +37,18 @@
 .container{
     background-color: aliceblue;
 }
+
+.container-abajo{
+    background-color: #ffffff;
+    width: 100%;
+    height: 550px;
+    border-radius: 1px;
+}
+
+.container-arriba {
+    background-color: #ffffff;
+}
+
+img{
+    margin-left: 29%;
+}

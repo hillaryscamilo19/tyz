@@ -8,19 +8,10 @@ import { UserIcon, LockClosedIcon , ArrowRightStartOnRectangleIcon} from "@heroi
 import Image from "next/image";
 import { AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import '../app/style.module.css'
-
-
-interface User {
-  _id: string;
-  fullname: string;
-  email: string;
-  phone_ext: number;
-  username: string;
-  department: string;
-  role: number;
-  status: boolean;
-}
+import '../app/style.css'
+import tyz from '../../public/img/tyz.png'
+import logo from '../../public/img/logo2.png'
+import '../app/style.css'
 
 export function LoginForm() {
   const router = useRouter();
@@ -74,12 +65,11 @@ export function LoginForm() {
       <div className="login-card row">
         {/* Columna Izquierda */}
         <div className="col-md-6 login-left d-none d-md-flex flex-column align-items-center justify-content-center text-center">
-          <div className="py-10 px-26 text-center">
+          <div className="py-10 px-26 text-center img">
             <Image
-              className="h-30"
-              src="../public/img/tyz.png"
+              src={tyz}
               alt="Logo"
-              width={100}
+              width={200}
               height={100}
             />
             <p className="text-center text-gray-600 mb-8 max-w-sm ">
@@ -88,9 +78,9 @@ export function LoginForm() {
             </p>
             <Image
               className="img-fluid mb-3"
-              src="../public/img/logo2.png"
+              src={logo}
               alt="Logo"
-              width={100}
+              width={250}
               height={100}
             />
           </div>
@@ -106,9 +96,11 @@ export function LoginForm() {
 
             {/* Mensaje de error */}
             {error && (
-              <div className="mb-4 text-center p-3 bg-red-100 text-red-700 rounded-lg ">
-                <AlertCircle className="h-4 w-4 mb-4" />
-                <AlertTitle>Error</AlertTitle>
+              <div className="error mb-4 text-center p-3 bg-red-100 text-red-700 rounded-lg ">
+                <div>
+                <AlertCircle  />
+                <AlertTitle className="titleError">Error</AlertTitle>
+                </div>
                 {error}
               </div>
             )}
@@ -152,7 +144,7 @@ export function LoginForm() {
               onClick={handleSubmit}
               type="submit"
               disabled={isLoading}
-              className="flex justify-center w-full cursor-pointer rounded-lg border color-tyz text-white py-2 rounded-lg hover:bg-green-500 transition"
+              className="Boton flex justify-center w-full cursor-pointer rounded-lg border color-tyz text-white py-2 rounded-lg hover:bg-green-500 transition"
             >
               <ArrowRightStartOnRectangleIcon className="w-6 h-6 mr-1" />
               {isLoading ? "Iniciando sesión..." : "Entrar"}
@@ -162,7 +154,7 @@ export function LoginForm() {
             <p className="text-center text-sm text-gray-600 mt-4">
               ¿No tienes una cuenta?{" "}
               <a
-                href="/auth/registro"
+                href="/registro"
                 className="text-green-600 hover:underline"
               >
                 Registrarse

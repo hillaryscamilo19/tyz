@@ -8,12 +8,17 @@ import {
   TicketIcon
 } from "@heroicons/react/24/outline";
 import TickedFormPage from "./TicketForm";
+import Logo from "../../public/img/LogTYZ.png"
 
-const Sidebar = () => {
+interface SidebarProps {
+  className?: string
+}
+
+export function Sidebar({ className }: SidebarProps) {
   return (
     <aside className="w-64 h-screen bg-slate-800 text-white flex flex-col p-6">
       <div className="mb-8">
-        <Image src='public/img/LogTYZ.png' alt="TYZ Logo" width={150} />
+        <Image src={Logo} alt="TYZ Logo" width={150} height={100} />
       </div>
 
       <div className="space-y-6">
@@ -21,7 +26,7 @@ const Sidebar = () => {
         <div>
           <h2 className="text-sm font-semibold text-gray-400 mb-2">INICIO</h2>
           <a
-            href="/home"
+            href="/dashboard"
             className="flex items-center gap-3 py-2 px-3 rounded hover:bg-slate-700"
           >
             <HomeIcon className="w-5 h-5 text-gray-300" />

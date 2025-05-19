@@ -23,7 +23,6 @@ export default function Navbar() {
     router.push("/login");
   };
 
-
   type Usuario = {
   _id: string;
   fullname?: string;
@@ -155,7 +154,7 @@ const fetchDepartamento = async (departamentoId) => {
 
 
   return (
-    <nav className="w-full bg-slate-800 text-white p-4 flex items-center justify-end relative shadow-md">
+    <nav className="w-full bg-slate-50 bg-slate-950 p-4 flex items-center justify-end relative shadow-md">
       <div className="flex items-center gap-4">
         {/* Modo oscuro/claro */}
         <div className="flex items-center gap-2">

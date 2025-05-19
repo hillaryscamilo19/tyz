@@ -1,5 +1,5 @@
 .main{
-    background-color: #f0f8ff;
+    background-color: rgba(241, 244, 249, 1);
 }
 
 .Container {  
@@ -9,7 +9,6 @@
 }
 
 .continerInput {
-
   justify-content: space-between;
   display: flex;
 }
