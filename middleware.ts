@@ -23,9 +23,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirigir a dashboard si el usuario ya está autenticado y está intentando acceder a login
-  if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
-  }
+if (isAuthRoute && token && !request.nextUrl.searchParams.has("callbackUrl")) {
+  return NextResponse.redirect(new URL("/dashboard", request.url))
+}
 
   return NextResponse.next()
 }

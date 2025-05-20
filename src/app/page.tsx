@@ -1,20 +1,7 @@
-import { LoginForm } from "@/components/login-form";
-import { getServerSession } from "next-auth/next";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/api/authOptions";
-import HomePage from "./dashboard/page";
-export default async function LoginPage() {
- const session = await getServerSession(authOptions)
+import { redirect } from "next/navigation"
 
-  if (session) {
-  
-  }
-
-  return (
-    <div >
-      <div >
-        <LoginForm />
-      </div>
-    </div>
-  )
+export default function Home() {
+  // Simplemente redirigir a la página de login
+  // No necesitamos verificar la sesión aquí
+  redirect("/login")
 }

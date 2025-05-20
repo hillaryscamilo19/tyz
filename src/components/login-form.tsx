@@ -3,61 +3,101 @@
 import type React from "react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { UserIcon, LockClosedIcon , ArrowRightStartOnRectangleIcon} from "@heroicons/react/24/outline";
+import { useSearchParams } from "next/navigation";
+import { useApi } from "@/hooks/use-api";
+import {
+  UserIcon,
+  LockClosedIcon,
+  ArrowRightStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import '../app/style.css'
-import tyz from '../../public/img/tyz.png'
-import logo from '../../public/img/logo2.png'
-import '../app/style.css'
+import "../app/style.css";
+import tyz from "../../public/img/tyz.png";
+import logo from "../../public/img/logo2.png";
+import "../app/style.css";
+import { authService } from "@/lib/api/auth-service";
+import router from "next/router";
 
 export function LoginForm() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const formData = new URLSearchParams();
+
+  // Obtener error de los parámetros de búsqueda
+  const errorParam = searchParams.get("error");
+  const [errorMessage, setErrorMessage] = useState<string>(
+    errorParam === "CredentialsSignin"
+      ? "Credenciales inválidas. Por favor, inténtalo de nuevo."
+      : ""
+  );
+
+  // Usar el hook personalizado para la autenticación
+  const { isLoading, execute: login } = useApi(
+    async () => {
+      return await authService.login({ username, password });
+    },
+    {
+      onSuccess: async (data) => {
+        if (!data) {
+          setErrorMessage(
+            "Error al iniciar sesión. Por favor, inténtalo de nuevo."
+          );
+          return;
+        }
+
+        // Usar NextAuth para establecer la sesión
+        const result = await signIn("credentials", {
+          username,
+          password,
+          redirect: false,
+          callbackUrl: "/dashboard",
+        });
+
+        if (result?.error) {
+          console.error("Error de inicio de sesión:", result.error);
+          setErrorMessage(
+            "Error al iniciar sesión. Por favor, inténtalo de nuevo."
+          );
+          return;
+        }
+
+        if (result?.ok) {
+          console.log("Inicio de sesión exitoso, redirigiendo...");
+          setIsRedirecting(true);
+          // Usar window.location en lugar de router.push para forzar una recarga completa
+          router.push("/dashboard");
+        }
+      },
+      onError: (error) => {
+        console.error("Error al iniciar sesión:", error);
+        setErrorMessage(
+          "Error al iniciar sesión. Por favor, inténtalo de nuevo."
+        );
+      },
+    }
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
 
-    try {
-      const formData = new URLSearchParams();
-      formData.append("username", username);
-      formData.append("password", password);
+    // Evitar múltiples envíos
+    if (isLoading || isRedirecting) return;
+    formData.append("username", username);
+    formData.append("password", password);
 
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const result = await signIn("credentials", {
-        username,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");
-        setIsLoading(false);
-        return;
-      }
-
-      router.push("/dashboard");
-      router.refresh();
-    } catch (error) {
-      setError(
-        "Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo."
-      );
-      setIsLoading(false);
-    }
+    await fetch("http://localhost:8000/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formData,
+    });
+    setErrorMessage("");
+    await login();
   };
 
   return (
@@ -66,12 +106,7 @@ export function LoginForm() {
         {/* Columna Izquierda */}
         <div className="col-md-6 login-left d-none d-md-flex flex-column align-items-center justify-content-center text-center">
           <div className="py-10 px-26 text-center img">
-            <Image
-              src={tyz}
-              alt="Logo"
-              width={200}
-              height={100}
-            />
+            <Image src={tyz} alt="Logo" width={200} height={100} />
             <p className="text-center text-gray-600 mb-8 max-w-sm ">
               Aplicación de tickets interna para las solicitudes realizadas
               entre departamentos.
@@ -95,13 +130,13 @@ export function LoginForm() {
             </h1>
 
             {/* Mensaje de error */}
-            {error && (
+            {errorMessage && (
               <div className="error mb-4 text-center p-3 bg-red-100 text-red-700 rounded-lg ">
                 <div>
-                <AlertCircle  />
-                <AlertTitle className="titleError">Error</AlertTitle>
+                  <AlertCircle />
+                  <AlertTitle className="titleError">Error</AlertTitle>
                 </div>
-                {error}
+                {errorMessage}
               </div>
             )}
 
@@ -134,6 +169,7 @@ export function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={isLoading || isRedirecting}
                 />
                 <LockClosedIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
               </div>
@@ -143,7 +179,7 @@ export function LoginForm() {
             <button
               onClick={handleSubmit}
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isRedirecting}
               className="Boton flex justify-center w-full cursor-pointer rounded-lg border color-tyz text-white py-2 rounded-lg hover:bg-green-500 transition"
             >
               <ArrowRightStartOnRectangleIcon className="w-6 h-6 mr-1" />
@@ -153,10 +189,7 @@ export function LoginForm() {
             {/* Registro */}
             <p className="text-center text-sm text-gray-600 mt-4">
               ¿No tienes una cuenta?{" "}
-              <a
-                href="/registro"
-                className="text-green-600 hover:underline"
-              >
+              <a href="/registro" className="text-green-600 hover:underline">
                 Registrarse
               </a>
             </p>

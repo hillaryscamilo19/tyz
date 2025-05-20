@@ -8,7 +8,7 @@ import { AuthProvider } from "@/components/auth-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "TY2 - Sistema de Tickets",
+  title: "TYZ - Sistema de Tickets",
   description: "Sistema de gestión de tickets",
     generator: 'v0.dev'
 }
@@ -19,11 +19,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es">
-      <body className={inter.className}>
-        <AuthProvider>
-            {children}
-        </AuthProvider>
+  <html lang="es" suppressHydrationWarning>
+      <body>
+        <ThemeProvider defaultTheme="system" storageKey="ty2-theme">
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
