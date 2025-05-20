@@ -42,18 +42,12 @@ export function LoginForm() {
     },
     {
       onSuccess: async (data) => {
-        if (!data) {
-          setErrorMessage(
-            "Error al iniciar sesión. Por favor, inténtalo de nuevo."
-          );
-          return;
-        }
+        // En lugar de usar authService.login() y luego signIn, solo usa signIn:
 
-        // Usar NextAuth para establecer la sesión
         const result = await signIn("credentials", {
+          redirect: false,
           username,
           password,
-          redirect: false,
           callbackUrl: "/dashboard",
         });
 
@@ -68,36 +62,28 @@ export function LoginForm() {
         if (result?.ok) {
           console.log("Inicio de sesión exitoso, redirigiendo...");
           setIsRedirecting(true);
-          // Usar window.location en lugar de router.push para forzar una recarga completa
           router.push("/dashboard");
         }
-      },
-      onError: (error) => {
-        console.error("Error al iniciar sesión:", error);
-        setErrorMessage(
-          "Error al iniciar sesión. Por favor, inténtalo de nuevo."
-        );
       },
     }
   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Evitar múltiples envíos
-    if (isLoading || isRedirecting) return;
+  const handleSubmit = async () => {
+    const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
 
-    await fetch("http://localhost:8000/token", {
+    const response = await fetch("http://localhost:8000/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: formData,
+      body: formData.toString(),
     });
-    setErrorMessage("");
-    await login();
+
+    const result = await response.json();
+    console.log(result);
+    // maneja resultado...
   };
 
   return (

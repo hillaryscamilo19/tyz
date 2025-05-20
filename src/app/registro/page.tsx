@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { RegisterForm } from "@/components/registro-form";
 
 type Usuario = {
   _id: string;
@@ -16,14 +17,7 @@ type Usuario = {
   role?: string;
   departamento_id?: string;
 };
-
-
 export default function RegisterPage() {
- 
+  return <RegisterForm />;
 
-  return (
-    <div className="flex h-screen w-full">
-      <RegisterPage></RegisterPage>
-    </div>
-  );
 }

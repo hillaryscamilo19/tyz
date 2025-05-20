@@ -1,13 +1,13 @@
 // Configuración para la API FastAPI
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/"
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
 export const API_TIMEOUT = 10000 // 10 segundos
 
 // Endpoints de la API
 export const API_ENDPOINTS = {
   // Autenticación
-  LOGIN: "/",
-  REFRESH_TOKEN: "/",
-  LOGOUT: "/",
+  LOGIN: "/token",
+  REFRESH_TOKEN: "/token",
+  LOGOUT: "/token",
 
   // Usuarios
   USERS: "/usuarios",

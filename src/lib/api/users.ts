@@ -1,23 +1,23 @@
-import { connectToDatabase } from "@/lib/mongodb"
-import { ObjectId } from "mongodb"
-import bcrypt from "bcryptjs"
 import { User } from "../models/types"
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
 export async function authenticateUser(username: string, password: string): Promise<User | null> {
   try {
-    const { db } = await connectToDatabase()
-    const user = await db.collection("users").findOne({ username })
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    })
 
-    if (!user) {
+    if (!response.ok) {
+      console.error("Fallo al autenticar usuario:", await response.text())
       return null
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
-
-    if (!isPasswordValid) {
-      return null
-    }
-
+    const user = await response.json()
     return user as User
   } catch (error) {
     console.error("Error al autenticar usuario:", error)
@@ -27,8 +27,14 @@ export async function authenticateUser(username: string, password: string): Prom
 
 export async function getUserById(id: string): Promise<User | null> {
   try {
-    const { db } = await connectToDatabase()
-    const user = await db.collection("users").findOne({ _id: new ObjectId(id) })
+    const response = await fetch(`${API_BASE_URL}/api/users/${id}`)
+
+    if (!response.ok) {
+      console.error("Fallo al obtener usuario por ID:", await response.text())
+      return null
+    }
+
+    const user = await response.json()
     return user as User
   } catch (error) {
     console.error("Error al obtener usuario por ID:", error)
@@ -38,8 +44,14 @@ export async function getUserById(id: string): Promise<User | null> {
 
 export async function getAllUsers(): Promise<User[]> {
   try {
-    const { db } = await connectToDatabase()
-    const users = await db.collection("users").find().toArray()
+    const response = await fetch(`${API_BASE_URL}/api/users`)
+
+    if (!response.ok) {
+      console.error("Fallo al obtener usuarios:", await response.text())
+      return []
+    }
+
+    const users = await response.json()
     return users as User[]
   } catch (error) {
     console.error("Error al obtener todos los usuarios:", error)
@@ -49,35 +61,21 @@ export async function getAllUsers(): Promise<User[]> {
 
 export async function createUser(userData: Omit<User, "_id" | "createdAt" | "updatedAt">): Promise<User | null> {
   try {
-    const { db } = await connectToDatabase()
-
-    // Verificar si el usuario ya existe
-    const existingUser = await db.collection("users").findOne({
-      $or: [{ username: userData.username }, { email: userData.email }],
+    const response = await fetch(`${API_BASE_URL}/api/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
     })
 
-    if (existingUser) {
-      throw new Error("El nombre de usuario o correo electrónico ya está en uso")
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error("Fallo al crear usuario:", errorText)
+      throw new Error(errorText)
     }
 
-    // Encriptar la contraseña
-    const hashedPassword = await bcrypt.hash(userData.password, 10)
-
-    const now = new Date()
-    const newUser = {
-      ...userData,
-      password: hashedPassword,
-      createdAt: now,
-      updatedAt: now,
-    }
-
-    const result = await db.collection("users").insertOne(newUser)
-
-    if (!result.insertedId) {
-      throw new Error("Error al crear el usuario")
-    }
-
-    const createdUser = await db.collection("users").findOne({ _id: result.insertedId })
+    const createdUser = await response.json()
     return createdUser as User
   } catch (error) {
     console.error("Error al crear usuario:", error)
@@ -87,26 +85,22 @@ export async function createUser(userData: Omit<User, "_id" | "createdAt" | "upd
 
 export async function updateUser(id: string, userData: Partial<User>): Promise<User | null> {
   try {
-    const { db } = await connectToDatabase()
+    const response = await fetch(`${API_BASE_URL}/api/users/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
 
-    // Si se actualiza la contraseña, encriptarla
-    if (userData.password) {
-      userData.password = await bcrypt.hash(userData.password, 10)
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error("Fallo al actualizar usuario:", errorText)
+      return null
     }
 
-    const now = new Date()
-    const result = await db.collection("users").findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...userData,
-          updatedAt: now,
-        },
-      },
-      { returnDocument: "after" },
-    )
-
-    return result as User
+    const updatedUser = await response.json()
+    return updatedUser as User
   } catch (error) {
     console.error("Error al actualizar usuario:", error)
     return null
@@ -115,9 +109,16 @@ export async function updateUser(id: string, userData: Partial<User>): Promise<U
 
 export async function deleteUser(id: string): Promise<boolean> {
   try {
-    const { db } = await connectToDatabase()
-    const result = await db.collection("users").deleteOne({ _id: new ObjectId(id) })
-    return result.deletedCount === 1
+    const response = await fetch(`${API_BASE_URL}/api/users/${id}`, {
+      method: "DELETE",
+    })
+
+    if (!response.ok) {
+      console.error("Fallo al eliminar usuario:", await response.text())
+      return false
+    }
+
+    return true
   } catch (error) {
     console.error("Error al eliminar usuario:", error)
     return false

@@ -9,6 +9,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+interface Departamento {
+  _id: number; // o string, según tu backend
+  name: string;
+}
 
 export function RegisterForm() {
   const [name, setName] = useState("");
@@ -23,29 +27,34 @@ export function RegisterForm() {
   /**Services */
 
   const handleRegister = async () => {
+    console.log("Datos enviados:", {
+      fullname: name,
+      email: email,
+      phone_ext: parseInt(extensión, 10),
+      department_id: Number(departamentos), 
+      role: 1,
+      username: username,
+      password: password,
+      status: true,
+    });
+    const payload = {
+      fullname: name,
+      email: email,
+      phone_ext: parseInt(extensión, 10),
+      department_id: (departamentos.length),
+      role: 1,
+      username: username,
+      password: password,
+      status: true,
+    };
+
     try {
       setError("");
 
-      const formData = new URLSearchParams();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("departamentos", departamentos);
-      formData.append("extensión", extensión);
-      formData.append("username", username);
-      formData.append("password", password);
-
-      const response = await fetch("/api/login", {
+      const response = await fetch("http://localhost:8000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nombre_Usuario: username,
-          nombre: name,
-          email: email,
-          extensión: extensión,
-          departamento_id: departamentos,
-          role: "usuario",
-          password: password,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
@@ -53,19 +62,22 @@ export function RegisterForm() {
       } else {
         const error = await response.json();
         console.error("Registro fallido:", error);
+        setError("Error al registrar. Verifica los campos.");
       }
     } catch (err) {
       console.error("Error al registrarse:", err);
+      setError("Error de conexión con el servidor");
     }
   };
 
   // Estado para departamentos
-  const [departamentoList, setDepartamentoList] = useState([]);
+const [departamentoList, setDepartamentoList] = useState<Departamento[]>([]);
+
 
   useEffect(() => {
     const fetchDepartamentos = async () => {
       try {
-      const response = await fetch('http://localhost:8000/api/departments');
+        const response = await fetch("http://localhost:8000/departments");
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -84,13 +96,10 @@ export function RegisterForm() {
     <div className="flex h-screen w-full">
       {/* Columna Izquierda */}
       <div className="w-1/2 bg-white flex flex-col justify-center mb-6 py-2 items-center p-10">
-    
         <p className="text-center text-gray-600 mb-6 max-w-sm">
           Aplicación de tickets interna para las solicitudes realizadas entre
           departamentos.
         </p>
- 
- 
       </div>
 
       {/* Columna Derecha */}
@@ -134,48 +143,49 @@ export function RegisterForm() {
           {/* Input Contraseña */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-            <span className="block mb-1 font-medium text-gray-600">Departamento</span>
-            <div className="relative">
-              <select
-                name="departments"
-                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-50"
-                value={departamentos}
-                onChange={(e) => setDepartamentos(e.target.value)}
-              >
-                <option value="">Seleccione un departamento</option>
-                {departamentoList && departamentoList.length > 0 ? (
-                  departamentoList.map((dept) => (
-                   <option key={dept._id} value={dept._id}>
-                    {dept.name}
+              <span className="block mb-1 font-medium text-gray-600">
+                Departamento
+              </span>
+              <div className="relative">
+                <select
+                  name="departments"
+                  className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-50"
+                  value={departamentos}
+                  onChange={(e) => setDepartamentos(e.target.value)}
+                >
+                  <option value="">Seleccione un departamento</option>
+                  {departamentoList && departamentoList.length > 0 ? (
+                    departamentoList.map((dept) => (
+                      <option key={dept._id} value={dept._id}>
+                        {dept.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      {departamentoList
+                        ? "No hay departamentos disponibles"
+                        : "Cargando departamentos..."}
                     </option>
-
-                  ))
-                ) : (
-                  <option value="" disabled>
-                    {departamentoList
-                      ? "No hay departamentos disponibles"
-                      : "Cargando departamentos..."}
-                  </option>
-                )}
-              </select>
-              <BuildingOffice2Icon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
-            </div>
+                  )}
+                </select>
+                <BuildingOffice2Icon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
+              </div>
             </div>
             <div>
-            <span className="block mb-1 font-medium text-gray-600">
-              Número de extensión
-            </span>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Escriba su Extension"
-                className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-50"
-                value={extensión}
-                onChange={(e) => setExtensión(e.target.value)}
-              />
-              <PhoneIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
+              <span className="block mb-1 font-medium text-gray-600">
+                Número de extensión
+              </span>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Escriba su Extension"
+                  className="text-dark-emphasis w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-50"
+                  value={extensión}
+                  onChange={(e) => setExtensión(e.target.value)}
+                />
+                <PhoneIcon className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" />
+              </div>
             </div>
-          </div>
           </div>
 
           <div className="mb-4 relative">
@@ -215,8 +225,8 @@ export function RegisterForm() {
           </button>
 
           {/*Registro */}
-             <p className="text-center text-sm text-gray-600 mt-4">
-             ¿Ya tienes una cuenta?{" "}
+          <p className="text-center text-sm text-gray-600 mt-4">
+            ¿Ya tienes una cuenta?{" "}
             <a href="/" className="text-green-600 hover:underline">
               Iniciar sesión
             </a>
